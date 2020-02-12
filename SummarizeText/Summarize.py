@@ -22,7 +22,6 @@ def _create_frequency_matrix(sentences):
             word = ps.stem(word)
             if word in stopWords:
                 continue
-
             if word in freq_table:
                 freq_table[word] += 1
             else:
@@ -38,7 +37,7 @@ def _create_tf_matrix(freq_matrix):
     for sent, f_table in freq_matrix.items():
         tf_table = {}
 
-        count_words_in_sentence = len(f_table)
+        count_words_in_sentence = sum(f_table.values())
         for word, count in f_table.items():
             tf_table[word] = count / count_words_in_sentence
 
@@ -124,22 +123,19 @@ def _find_average_score(sentenceValue) -> int:
 def _generate_summary(sentences, sentenceValue, threshold):
     sentence_count = 0
     summary = ''
-
+    print(threshold)
     for sentence in sentences:
+        print(sentence, sentenceValue[sentence[:15]])
         if sentence[:15] in sentenceValue and sentenceValue[sentence[:15]] >= (threshold):
-            summary += " " + sentence
+            summary += sentence + " "
             sentence_count += 1
 
     return summary
 
 # 1 Sentence Tokenize
-text = 'If you have not achieved the success you deserve and are considering giving up, will you ' \
-       'regret it in a few years or decades from now? Only you can answer that, but you should carve out time to discover your motivation for pursuing your goals. ' \
-       'It’s a fact, if you don’t know what you want you’ll get what life hands you and it may not be in your best interest, affirms author Larry Weidel: “Winners know that if you don’t figure out what you want, you’ll get whatever life hands you.” The key is to develop a powerful vision of what you want and hold that image in your mind. Nurture it daily and give it life by taking purposeful action towards it.' \
-       'Vision + desire + dedication + patience + daily action leads to astonishing success. Are you willing to commit to this way of life or jump ship at the first sign of failure? I’m amused when I read questions written by millennials on Quora who ask how they can become rich and famous or the next Elon Musk. ' \
-       'Success is a fickle and long game with highs and lows. ' \
-       'Play hard and work hard.' \
-       'Similarly, there are no assurances even if you’re an overnight sensation, to sustain it for long, particularly if you don’t have the mental and emotional means to endure it. This means you must rely on the one true constant in your favour: your personal development. The more you grow, the more you gain in terms of financial resources, status, success — simple. If you leave it to outside conditions to dictate your circumstances, you are rolling the dice on your future. So become intentional on what you want out of life. Commit to it. Nurture your dreams. Focus on your development and if you want to give up, know what’s involved before you take the plunge. Because I assure you, someone out there right now is working harder than you, reading more books, sleeping less and sacrificing all they have to realise their dreams and it may contest with yours. Don’t leave your dreams to chance.'
+text = 'I told him not to go out of the room. But he never listens to me. He thinks I am always jelous of what he has become without my help' \
+       'Friends are always our well wishers. we should listen to them. One usually feels betrayed when their friends take an opposite view as that of ours. we have to understand that it is for our good' \
+       'This is a dilemma every human regularly faces. we should try to navigate such situations with utter care by listening to people but making decisions which are best for everybody '
 sentences = sent_tokenize(text)
 total_documents = len(sentences)
 # print(sentences)
@@ -179,5 +175,5 @@ threshold = _find_average_score(sentence_scores)
 # print(threshold)
 
 # 9 Important Algorithm: Generate the summary
-summary = _generate_summary(sentences, sentence_scores, 1.3 * threshold)
+summary = _generate_summary(sentences, sentence_scores, threshold)
 print(summary)
